@@ -10,11 +10,14 @@ register.use(express.json());
 
 register.post('/api/register', async (req, res, next) => {
     let user = req.body;
-    user.password = bcrypt.hash(user.password, 12);
 
     try {
+        user.password = await bcrypt.hash(user.password, 12);
         await regHlp.register(user);
+        res.json({ message: 'User registerd'});
     } catch {
         next(err.error500);
     }
 })
+
+module.exports = register;
